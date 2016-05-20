@@ -628,9 +628,14 @@ bool CPVRManager::Load(void)
   if (m_addons)
     m_addons->Start();
 
-  /* load at least one client */
+  /* load all clients */
   while (IsInitialising() && m_addons && !m_addons->HasConnectedClients())
     Sleep(50);
+
+   CLog::Log(LOGDEBUG, "PVRManager - Connected clients = %d, enabled clients = %d", m_addons->ConnectedClientAmount(), m_addons->EnabledClientAmount());
+   while (IsInitialising() && m_addons && m_addons->ConnectedClientAmount()< m_addons->EnabledClientAmount())
+  Sleep(50);
+   CLog::Log(LOGDEBUG, "PVRManager - Connected clients = %d, enabled clients = %d", m_addons->ConnectedClientAmount(), m_addons->EnabledClientAmount());
 
   if (!IsInitialising() || !m_addons || !m_addons->HasConnectedClients())
     return false;
